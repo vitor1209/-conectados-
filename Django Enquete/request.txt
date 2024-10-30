@@ -1,0 +1,85 @@
+request e uma requisisao/solicitação o django recebe essa request e da uma response
+
+Request = (Requisição)
+Uma request é uma solicitação que o cliente faz ao servidor. 
+Esta requisição pode ser para carregar uma página, enviar um formulário, e etc.
+O Django recebe essa request e decide qual parte do código vai processar, com base nas URLs e nas views 
+associadas a cada URL.
+
+Response = (Resposta)
+Após processar a request, o Django retorna uma response, que pode ser uma página HTML, um arquivo, ou um código de status.
+A response é o que o cliente vê ou recebe como resposta ao que foi solicitado.
+________________________________________________________________________________________________________________________________
+
+django-admin startproject Nome do projeto:
+    Cria um novo projeto com a estrutura inicial de arquivos.
+
+python manage.py startapp Nome da app:
+    Cria uma aplicação dentro do projeto, para funcionalidades mais específicas serem desenvolvidas e organizadas.
+
+python manage.py runserver:
+    Inicia o servidor de desenvolvimento local, permitindo acessar o site no navegador em http://127.0.0.1:(num da porta).
+
+python manage.py makemigrations:
+    Detecta alterações nos modelos(models) e cria migrações, que são arquivos que descrevem essas mudanças no banco de dados.
+
+python manage.py migrate:
+    Aplica as migrações criadas no banco de dados.
+
+python manage.py createsuperuser:
+    Cria um usuário administrador (superuser) para acessar a administração do Django.
+
+________________________________________________________________________________________________________________________________
+
+Ciclo de Requisição e Resposta no Django
+
+WSGI (Web Server Gateway Interface) :
+    Início do processo: o WSGI recebe a requisição HTTP e direciona para o Django.
+
+Request == Requisição :
+    processa dados antes de seguir para a próxima etapa.   
+
+URL Resolution (Resolução de URL):
+    Django usa o arquivo urls.py para identificar a URL solicitada e a encaminha para a view correta, pega uma url e chama uma class para 'enquete/'.
+
+View:
+    A view, definida em views.py, e onde tem a lógica. é onde a requisição é processada e as interações com o banco de dados acontecem.
+
+Model (Modelo):
+    A view se comunica com os models, definidos em models.py, que representam a estrutura dos dados e manipulam o banco de dados meio q é onde defino o que vai ter em cada tabela.
+
+Managers e objects :
+    O objects é o manager padrão do Django, responsável por interagir com o banco de dados.
+
+Com objects, você pode:
+    Consultar dados: Model.objects.all()
+    Filtrar: Model.objects.filter(condição)
+    Criar: Model.objects.create(dados)
+    Excluir: Model.objects.delete()
+
+Database (Banco de Dados):
+    O Django operações de banco de dados em código Python, facilitando a vida na manipulação dos dados.
+
+Template :
+    Após processar a lógica na view, Django usa um template HTML para renderizar a resposta junta html e python.
+
+Response (Resposta):
+    A resposta é gerada e retorna ao cliente, passando novamente pelo middleware antes de chegar ao navegador.
+
+Exception (Exceção):
+    Em caso de erro, o Django lida com exceções através de middleware, retornando uma resposta de erro personalizada, quando necessário.
+________________________________________________________________________________________________________________________________
+
+CRUD: Criar (Create), Ler (Read), Atualizar (Update) e Deletar (Delete).
+
+Criar: 
+    pode usar forms para permitir que os usuários insiram novos dados no banco de dados. 
+
+Ler: 
+    Para visualizar os dados, usamos views que consultam o banco de dados e retornam os registros para serem exibidos nas templates.
+
+Atualizar: 
+    Permite que o usuários modifiquem registros que ja foram feitos. procura pelo "PK" carrega os dados atuais e os salva após as alterações.
+
+Deletar: 
+    Permite a remoção de registros do banco de dados, e bom q seja após uma confirmação do usuário.

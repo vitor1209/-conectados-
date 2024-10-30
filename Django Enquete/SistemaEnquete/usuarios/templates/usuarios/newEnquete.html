@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova Enquete</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <h1 class="mt-4 mb-4 text-center">Criar Nova Enquete</h1>
+                
+                <div class="card">
+                    <div class="card-body">
+                        <form method="POST">
+                            {% csrf_token %}
+                            {{ form.non_field_errors }}
+                            {{ form.as_p }}
+                            {% if enquete.id %}
+                            <a href="{% url 'enqueteopcoes' enquete.id %}" class="btn btn-primary w-100">Adicionar opções</a>
+                            {% endif %}
+                            <button type="submit" class="btn btn-success w-100 mt-3">Salvar Enquete</button>
+                        </form> 
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <a href="{% url 'Enquete' %}" class="btn btn-secondary w-100 mb-5">Voltar para Lista de Enquetes</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

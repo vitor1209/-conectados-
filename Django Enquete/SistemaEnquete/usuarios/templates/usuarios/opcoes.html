@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Adicionar Opções à Enquete</title>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">Adicionar Opções</h1>
+        <form method="POST">
+            {% csrf_token %}
+            <div id="options-container">
+                <div class="form-group">
+                    <label for="opcao">Opção</label>
+                    <input type="text" class="form-control" name="opcao" placeholder="Digite a opção">
+                </div>
+            </div>
+            <button type="button" class="btn btn-secondary" id="add-option">Adicionar Outra Opção</button>
+            <button type="submit" class="btn btn-primary">Salvar Enquete</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('add-option').addEventListener('click', function() {
+            var optionsContainer = document.getElementById('options-container');
+            var newOptionDiv = document.createElement('div');
+            newOptionDiv.className = 'form-group';
+            newOptionDiv.innerHTML = `
+                <label for="opcao">Opção</label>
+                <input type="text" class="form-control" name="opcao" placeholder="Digite a opção">
+            `;
+            optionsContainer.appendChild(newOptionDiv);
+        });
+    </script>
+</body>
+</html>
