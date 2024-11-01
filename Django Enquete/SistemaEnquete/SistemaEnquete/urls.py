@@ -16,7 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from usuarios.views import user, listagem, forms , updateEnquete , deleteEnquete, opcoesEnquete
+from usuarios.views import user, listagem, forms , updateEnquete , deleteEnquete, opcoesEnquete, resultado
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,5 +27,5 @@ urlpatterns = [
     path('enquete_update/<int:pk>/', updateEnquete, name='enqueteUpdate'),
     path('enquete_delete/<int:pk>/', deleteEnquete, name='enquetedelete'),
     path('enquete_opcoes/<int:pk>/', opcoesEnquete, name='enqueteopcoes'),
-    path('enquete_opcoes/', opcoesEnquete, name='enquete_opcoes'),
+    path('resultado/<int:pk>/', resultado, name='resultado'),
 ]

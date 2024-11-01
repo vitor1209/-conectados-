@@ -20,6 +20,8 @@
                             {{ form.as_p }}
                             {% if enquete.id %}
                             <a href="{% url 'enqueteopcoes' enquete.id %}" class="btn btn-primary w-100">Adicionar opções</a>
+                            {% else %}
+                            <button type="submit" name="add_opcoes" class="btn btn-primary w-100 mt-3">Adicionar opções</button>
                             {% endif %}
                             <button type="submit" class="btn btn-success w-100 mt-3">Salvar Enquete</button>
                         </form> 

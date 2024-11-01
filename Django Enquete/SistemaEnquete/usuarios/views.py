@@ -1,11 +1,11 @@
-from django.shortcuts import render, get_object_or_404 , redirect
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.forms import ModelForm
 from django import forms
 from .models import Usuario
 from .models import Enquete
 from .models import Opcao
-from .models import Enquete
+from .models import Voto
 from django.db.models import Max
 
 class UsuarioForm(forms.ModelForm):
@@ -28,12 +28,7 @@ def listagem(request):
     data['enquetes'] = Enquete.objects.all
     data['Opcao'] = Opcao.objects.all
     return render(request , 'usuarios/enquetes.html' , data)
-
-def listagem(request):
-    data = {}
-    data['enquetes'] = Enquete.objects.all
-    data['Opcao'] = Opcao.objects.all
-    return render(request , 'usuarios/enquetes.html' , data)
+    
 
 class EnqueteForm(ModelForm):
    class Meta:
@@ -46,16 +41,23 @@ class EnqueteForm(ModelForm):
             'data_fim': forms.DateTimeInput(attrs={'placeholder': 'Data de Fim', 'class': 'form-control', 'type': 'datetime-local'}),
         }
 
-def forms(request):         
+def forms(request):
     data = {}
     form = EnqueteForm(request.POST or None)
 
-    if form.is_valid():
-        form.save()
-        return redirect('Enquete')
+    if request.method == "POST":
+        if 'save_enquete' in request.POST:  
+            if form.is_valid():
+                form.save()
+                return redirect('Enquete')  
+        elif 'add_opcoes' in request.POST:  
+            if form.is_valid():
+                enquete = form.save()  
+                return redirect('enqueteopcoes', enquete.id) 
 
     data['form'] = form
     return render(request, 'usuarios/newEnquete.html', data)
+
 
 def updateEnquete(request, pk):
     data = {}
@@ -82,40 +84,24 @@ class opacaoForm(ModelForm):
         fields = ['opcao']
 
 def opcoesEnquete(request, pk=None):
-    if pk:
-        data = {}
-        enquete = get_object_or_404(Enquete, pk=pk)
-        form = opacaoForm(request.POST or None, instance=Opcao)
+    data = {}
+    enquete = Enquete.objects.get(pk=pk)
+    form = opacaoForm(request.POST or None, instance=Opcao)
 
-        if request.method == 'POST':
-            form = opacaoForm(request.POST) 
-            if form.is_valid():
-                opcao = form.save(commit=False)
-                opcao.enquete = enquete
-                opcao.save()
-                return redirect('Enquete')
-            else:
-                return redirect('Enquete')
-        data['form'] = form
-        data['Opcao'] = enquete
-        return render(request, 'usuarios/opcoes.html', data)       
+    if request.method == 'POST':
+        opcoes_data = request.POST.getlist('opcao')  
+        
+        opcao = [
+            Opcao(enquete=enquete, opcao=opcao_texto)  
+            for opcao_texto in opcoes_data
+        ]
 
-    else:
-        data = {}
-        maior_id = Enquete.objects.aggregate(Max('id'))['id__max']
-        enquete = (maior_id or 0) + 1
+        Opcao.objects.bulk_create(opcao)
+        return redirect('Enquete')
+    
+    data['form'] = form
+    data['Opcao'] = enquete
+    return render(request, 'usuarios/opcoes.html', data)       
 
-        form = opacaoForm(request.POST or None, instance=Opcao)
-
-        if request.method == 'POST':
-            form = opacaoForm(request.POST) 
-            if form.is_valid():
-                opcao = form.save(commit=False)
-                opcao.enquete = enquete
-                opcao.save()
-                return redirect('Enquete')
-            else:
-                return redirect('Enquete')
-        data['form'] = form
-        data['Opcao'] = enquete
-        return render(request, 'usuarios/opcoes.html', data)   
+def resultado(request, pk=None):
+    return redirect('Enquete')
