@@ -1,0 +1,6 @@
+<h2>Resultados da Enquete: {{ enquete.pergunta }}</h2>
+<ul>
+    {% for opcao, contagem in resultados.items %}
+        <li>{{ opcao.texto }} - {{ contagem }} voto(s)</li>
+    {% endfor %}
+</ul>

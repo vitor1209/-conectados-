@@ -1,28 +1,15 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.forms import ModelForm
 from django import forms
-from .models import Usuario
-from .models import Enquete
-from .models import Opcao
-from .models import Voto
 from django.db.models import Max
+from .models import Enquete, Opcao, Voto
+from .forms import VotoForm
+from django.contrib.auth.models import User
 
-class UsuarioForm(forms.ModelForm):
-    class Meta:
-        model = Usuario
-        fields = ['nome', 'email', 'senha'] 
 
-def user(request):
-    if request.method == 'POST':
-        form = UsuarioForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('Enquete')
-    else:
-        form = UsuarioForm()
-    return render(request, 'usuarios/user.html' , {'form': form})
-
+@login_required
 def listagem(request):
     data = {}
     data['enquetes'] = Enquete.objects.all
@@ -101,7 +88,31 @@ def opcoesEnquete(request, pk=None):
     
     data['form'] = form
     data['Opcao'] = enquete
-    return render(request, 'usuarios/opcoes.html', data)       
+    return render(request, 'usuarios/opcoes.html', data)   
 
 def resultado(request, pk=None):
     return redirect('Enquete')
+
+@login_required  
+def votarEnquete(request, pk):
+    enquete = Enquete.objects.get(pk=pk)
+
+    if request.method == 'POST':
+        form = VotoForm(request.POST, enquete_id=pk)
+        if form.is_valid():
+            opcao_id = form.cleaned_data['opcao']
+            opcao = Opcao.objects.get(pk=pk)
+
+            Voto.objects.create(opcao=opcao, usuario=request.user)  
+            return redirect('resultado', enquete_id=pk)
+    else:
+        form = VotoForm(enquete_id=pk)
+
+    return render(request, 'enquetes.html', {'form': form, 'enquete': enquete})
+
+def resultadoe(request, pk):
+    enquete = Enquete.objects.get(pk=pk)
+    opcoes = enquete.opcoes.all()
+    resultados = {opcao: Voto.objects.filter(opcao=opcao).count() for opcao in opcoes}
+    
+    return render(request, 'resultado.html', {'enquete': enquete, 'resultados': resultados})

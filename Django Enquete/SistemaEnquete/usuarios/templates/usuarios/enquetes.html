@@ -27,7 +27,7 @@
                       </li>
                       {% endfor %}
                   </ul>
-                  <button style="border-radius: 0px " onclick="desmarcarInput('enquete{{ enquete.id }}')" type="submit" class="btn btn-primary">Votar</button>
+                  <button style="border-radius: 0px "  onclick="desmarcarInput('enquete{{ enquete.id }}')" type="submit" class="btn btn-primary">Votar</button>
                   <a style="border-radius: 0px;" href="{% url 'enqueteUpdate' enquete.id %}" class="btn btn-success">Modificar</a>
                   <a style="border-radius: 0px;" href="{% url 'resultado' enquete.id %}" class="btn btn-warning">Resultados</a>
                   <a style="border-radius: 0px 0px 5px 5px;" href="{% url 'enquetedelete' enquete.id %}" class="btn btn-danger">Deletar</a>

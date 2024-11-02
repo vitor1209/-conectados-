@@ -1,12 +1,5 @@
 from django.db import models
-
-class Usuario(models.Model):   
-        nome = models.CharField(max_length=30)
-        email = models.EmailField(unique=True)
-        senha = models.CharField(max_length=20)
-
-        def __str__(self):
-            return self.nome
+from django.contrib.auth.models import User
 
 class Enquete(models.Model):
         titulo =  models.CharField(max_length=20)
@@ -26,4 +19,4 @@ class Opcao(models.Model):
 
 class Voto(models.Model):
       opcao = models.ForeignKey(Opcao, on_delete=models.CASCADE)
-      usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, null=True, blank=True) 
+      usuario = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True) 
