@@ -4,9 +4,11 @@ from django.http import HttpResponse
 from django.forms import ModelForm
 from django import forms
 from django.db.models import Max
-from .models import Enquete, Opcao, Voto
+from .models import Enquete, Opcao
 from .forms import VotoForm
 from django.contrib.auth.models import User
+from django.urls import reverse_lazy
+from django.contrib import messages
 
 
 @login_required
@@ -14,6 +16,13 @@ def listagem(request):
     data = {}
     data['enquetes'] = Enquete.objects.all
     data['Opcao'] = Opcao.objects.all
+
+    def get_context_data(self, **kwargs):
+        context = super(listagem, self). get_context_data(**kwargs)
+        question = kwargs.get('object')
+        context['totalVotos'] = question.VotosTotais()
+        return super().get_context_data(**kwargs)
+
     return render(request , 'usuarios/enquetes.html' , data)
     
 
@@ -90,29 +99,27 @@ def opcoesEnquete(request, pk=None):
     data['Opcao'] = enquete
     return render(request, 'usuarios/opcoes.html', data)   
 
-def resultado(request, pk=None):
-    return redirect('Enquete')
-
-@login_required  
-def votarEnquete(request, pk):
+def voto(request , pk):
     enquete = Enquete.objects.get(pk=pk)
-
     if request.method == 'POST':
-        form = VotoForm(request.POST, enquete_id=pk)
-        if form.is_valid():
-            opcao_id = form.cleaned_data['opcao']
-            opcao = Opcao.objects.get(pk=pk)
-
-            Voto.objects.create(opcao=opcao, usuario=request.user)  
-            return redirect('resultado', enquete_id=pk)
-    else:
-        form = VotoForm(enquete_id=pk)
-
-    return render(request, 'enquetes.html', {'form': form, 'enquete': enquete})
-
-def resultadoe(request, pk):
-    enquete = Enquete.objects.get(pk=pk)
-    opcoes = enquete.opcoes.all()
-    resultados = {opcao: Voto.objects.filter(opcao=opcao).count() for opcao in opcoes}
+        try:
+            selected_opcao = enquete.opcao_set.get(pk=request.POST['opcao'])
+        except KeyError:
+            print('Erro: Chave "opcao" não encontrada em request.POST')
+            messages.error(request, 'Selecione uma alternativa para votar')
+        except Opcao.DoesNotExist:
+            print('Erro: Opcao com o pk especificado não existe para esta enquete') 
+        else:
+            selected_opcao.votos += 1
+            selected_opcao.save()
+            return redirect(  reverse_lazy ('Enquete'))
     
-    return render(request, 'resultado.html', {'enquete': enquete, 'resultados': resultados})
+    data = {'question':  Enquete}
+    return render(request, 'usuarios/enquetes.html', data)
+
+def resultado(request , pk):
+    enquete = Enquete.objects.get(pk=pk)
+    data = {'enquete' : Enquete}
+    data['votos'] = enquete.resultados()    
+
+    return render(request, 'usuarios/resultado.html', data )

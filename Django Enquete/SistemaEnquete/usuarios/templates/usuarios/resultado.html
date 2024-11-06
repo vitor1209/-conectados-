@@ -1,6 +1,23 @@
-<h2>Resultados da Enquete: {{ enquete.pergunta }}</h2>
-<ul>
-    {% for opcao, contagem in resultados.items %}
-        <li>{{ opcao.texto }} - {{ contagem }} voto(s)</li>
+<h1>{{ enquete.titulo }}</h1>
+<ul class="list-unstyled">
+    {% for opcao in votos %}
+        <li>
+            {{ opcao.opcao }} {{ opcao.votos }} voto{{ opcao.votos|pluralize }}
+            <div class="progress" style="height: 30px;">
+                <div
+                    class="progress-bar h6"
+                    role="progressbar"
+                    style="width: {{ opcao.percentual|floatformat:0 }}%; height: 30px;"
+                    aria-valuenow="{{ opcao.percentual|floatformat:0 }}"
+                    aria-valuemin="0" aria-valuemax="100">
+                    {{ opcao.percentual|floatformat:0 }}%
+                </div>
+            </div>
+        </li>
     {% endfor %}
 </ul>
+<br/>
+<br/>
+<a href="{% url 'Enquete' %}">Votar novamente?</a>
+
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">

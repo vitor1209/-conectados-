@@ -12,15 +12,21 @@
                 <form method="POST">
                     {% csrf_token %}
                     <div class="mb-3">
-                        <label for="utilizador" class="form-label">Nome de Usuario:</label>
-                        <input type="text" class="form-control" id="utilizador" name="utilizador" required>
+                        <label for="username" class="form-label">Nome de Usuario:</label>
+                        <input type="text" class="form-control" id="username" name="username" required>
                     </div>
                     <div class="mb-3">
-                        <label for="senha" class="form-label">Senha:</label>
-                        <input type="password" class="form-control" id="senha" name="senha" required>
+                        <label for="password" class="form-label">Senha:</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
                     </div>
                     <button type="submit" class="btn btn-primary">Entrar</button>
                     <a  href="{% url 'visualizacao'%}" class="btn btn-warning">Cadastrar</a>
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-danger">{{ message }}</div>
+                        {% endfor %}
+                    {% endif %}
+
                 </form>
             </div>
         </div>

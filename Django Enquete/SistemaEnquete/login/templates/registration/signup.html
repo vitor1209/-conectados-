@@ -12,24 +12,39 @@
                 <form method="POST">
                     {% csrf_token %}
                     <div class="mb-3">
-                        <label for="utilizador" class="form-label">Nome de Usuario:</label>
-                        <input type="text" class="form-control" id="utilizador" name="utilizador" required>
+                        <label for="username" class="form-label">Nome de Usuario:</label>
+                        <input type="text" class="form-control" id="username" name="username" required>
                         <small class="form-text text-muted">Obrigatório. 150 caracteres ou menos. Apenas letras, dígitos e @/./+/-/_.</small>
+                        {% if form.username.errors %}
+                            <div class="text-danger">
+                                {{ form.username.errors }}
+                            </div>
+                        {% endif %}
                     </div>
                     <div class="mb-3">
-                        <label for="senha" class="form-label">Senha:</label>
-                        <input type="password" class="form-control" id="senha" name="senha" required>
+                        <label for="password1" class="form-label">Senha:</label>
+                        <input type="password" class="form-control" id="password1" name="password1" required>
                         <ul class="form-text text-muted">
                             <li>Sua senha não pode ser muito semelhante às suas outras informações pessoais.</li>
                             <li>A sua senha deve conter pelo menos 8 caracteres.</li>
                             <li>Sua senha não pode ser uma senha comumente usada.</li>
                             <li>Sua senha não pode ser totalmente numérica.</li>
                         </ul>
+                           {% if form.password1.errors %}
+                                <div class="text-danger">
+                                    {{ form.password1.errors }}
+                                </div>
+                            {% endif %}
                     </div>
                     <div class="mb-3">
-                        <label for="senha_confirmacao" class="form-label">Confirmação da Senha:</label>
-                        <input type="password" class="form-control" id="senha_confirmacao" name="senha_confirmacao" required>
+                        <label for="password2" class="form-label">Confirmação da Senha:</label>
+                        <input type="password" class="form-control" id="password2" name="password2" required>
                         <small class="form-text text-muted">Introduza a senha como acima, para verificação.</small>
+                           {% if form.password2.errors %}
+                                <div class="text-danger">
+                                    {{ form.password2.errors }}
+                                </div>
+                            {% endif %}
                     </div>
                     <button type="submit" class="btn btn-primary">Entrar</button>
                 </form>

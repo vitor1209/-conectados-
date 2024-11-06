@@ -16,13 +16,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from usuarios.views import listagem, forms , updateEnquete , deleteEnquete, opcoesEnquete, resultado
+from usuarios.views import listagem, forms , updateEnquete , deleteEnquete, opcoesEnquete, resultado, voto
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('login.urls')),
     path('enquete/', listagem , name='Enquete'),
+    path('enquete/<int:pk>/', voto , name='votar'),
     path('newEnquete/', forms, name='newEnquete'),
     path('enquete_update/<int:pk>/', updateEnquete, name='enqueteUpdate'),
     path('enquete_delete/<int:pk>/', deleteEnquete, name='enquetedelete'),

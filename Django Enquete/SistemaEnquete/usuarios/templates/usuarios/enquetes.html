@@ -11,6 +11,16 @@
               <h1 class="mt-4 mb-5" >Enquetes</h1>
               {% if enquetes %}
               {% for enquete in enquetes %}
+              {% if messages %}
+              <div>
+                  {% for message in messages %}
+                      <div class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %}">
+                          {{ message }}
+                      </div>
+                  {% endfor %}
+              </div>
+          {% endif %}
+          
               <div class="card mb-3">
                   <div class="card-header">
                     <strong> {{ enquete.titulo }}</strong>
@@ -18,16 +28,28 @@
                   <div class="card-body">
                       <p>{{ enquete.descricao }}</p>
                   </div>
-                  <ul class="list-group list-group-flush">
-                      {% for opcao in enquete.opcao_set.all %} 
-                      <li class="list-group-item">
-                          <label class="form-check-label">
-                              <input type="radio" class="form-check-input" name="enquete{{ enquete.id }}" value="{{ opcao.id }}"> {{ opcao }}
+                  <form action="{% url 'votar' pk=enquete.id %}" method="post">
+                    {% csrf_token %}
+                  
+                    <ul class="list-group list-group-flush">
+                      {% for opcao in enquete.opcao_set.all %}
+                        <li class="list-group-item">
+                          <input type="radio" name="opcao" id="opcao{{ forloop.counter }}" class="form-check-input" value="{{ opcao.id }}">
+                          <label class="form-check-label" for="opcao{{ forloop.counter }}">
+                            {{ opcao }}
                           </label>
-                      </li>
+                        </li>
+                      {% empty %}
+                        <li class="list-group-item">
+                          <h5>Não há alternativas cadastradas</h5>
+                        </li>
                       {% endfor %}
-                  </ul>
-                  <button style="border-radius: 0px "  onclick="desmarcarInput('enquete{{ enquete.id }}')" type="submit" class="btn btn-primary">Votar</button>
+                    </ul>
+                  
+                    <button type="submit" style="border-radius: 0px;" class="btn btn-primary w-100">Votar</button>
+                  </form>
+
+                
                   <a style="border-radius: 0px;" href="{% url 'enqueteUpdate' enquete.id %}" class="btn btn-success">Modificar</a>
                   <a style="border-radius: 0px;" href="{% url 'resultado' enquete.id %}" class="btn btn-warning">Resultados</a>
                   <a style="border-radius: 0px 0px 5px 5px;" href="{% url 'enquetedelete' enquete.id %}" class="btn btn-danger">Deletar</a>
@@ -43,13 +65,6 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-      function desmarcarInput(enqueteName) {
-        var inputs = document.getElementsByName(enqueteName);
-        for (var i = 0; i < inputs.length; i++) {
-          inputs[i].checked = false;
-        }
-      }
-    </script>
+
   </body>
   </html>
