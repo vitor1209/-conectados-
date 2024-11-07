@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - Meu Dinheiro</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+        }
+        .container {
+            width: 100%;
+            max-width: 320px;
+            padding: 5%;
+            background-color: white;
+            box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            text-align: center;
+        }
+        .container h2 {
+            color: #333;
+            font-size: 18px;
+        }
+        .form-group {
+            margin-bottom: 10px;
+            text-align: left;
+        }
+        .form-group label {
+            font-size: 13px;
+            color: #666;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            margin-top: 4px;
+        }
+        .password-requirements {
+            font-size: 11px;
+            color: #666;
+            background-color: #f0f0f0;
+            padding: 8px;
+            border-radius: 4px;
+            text-align: left;
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #00b386;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            font-size: 15px;
+            cursor: pointer;
+        }
+        .submit-btn:hover {
+            background-color: #009973;
+        }
+        .footer {
+            font-size: 11px;
+            color: #666;
+            margin-top: 10px;
+        }
+        .footer a {
+            color: #00b386;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Termine seu cadastro</h2>
+    <form method="post" action="{% url 'signup' %}">
+
+        {{ error }}
+
+        {% csrf_token %}
+
+        
+        <div class="form-group">
+            <label for="id_email">Email</label>
+            <input type="email" name="email" id="id_email" placeholder="seuemail@exemplo.com" required>
+        </div>
+
+        <div class="form-group">
+            <label for="id_username">Nome</label>
+            <input type="text" name="username" id="id_username" required>
+        </div>
+
+        <div class="form-group">
+            <label for="id_moeda">Moeda padrão do sistema</label>
+            <select name="moeda" id="id_moeda" required>
+                <option value="real">Real (R$)</option>
+                <option value="dolar">Dólar (US$)</option>
+                <option value="euro">Euro (€)</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="id_password1">Senha</label>
+            <input type="password" name="password1" id="id_password1" required>
+        </div>
+
+        <div class="form-group">
+            <label for="id_password2">Confirme sua senha</label>
+            <input type="password" name="password2" id="id_password2" required>
+        </div>
+
+        <div class="password-requirements">
+            Sua senha deve conter no mínimo:
+            <ul>
+                <li>8 caracteres</li>
+                <li>Uma letra maiúscula</li>
+                <li>Uma letra minúscula</li>
+                <li>Um número</li>
+                <li>Um símbolo</li>
+            </ul>
+        </div>
+
+        <button type="submit" class="submit-btn">Criar conta</button>
+    </form>
+
+    <div class="footer">
+        Ao se cadastrar você declara estar de acordo com nossos
+        <a href="#">Termos de Uso</a> e <a href="#">Política de Privacidade</a>.
+    </div>
+</div>
+
+</body>
+</html>
+ 
