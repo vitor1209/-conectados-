@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            width: 90%;
+            max-width: 1200px;
+        }
+        .card {
+            background-color: white;
+            box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+        }
+        .card h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+        .card p {
+            color: #666;
+            margin-bottom: 15px;
+        }
+        .card .btn {
+            padding: 10px 15px;
+            background-color: #00b386;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .card .btn:hover {
+            background-color: #009973;
+        }
+        .icon-placeholder {
+            font-size: 40px;
+            color: #ccc;
+            margin-bottom: 10px;
+        }
+
+        /* Estilos para o botão de abertura do modal */
+        .btn-open-modal {
+            background-color: #00b386;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        /* Estilos para o modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 3%;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 8px;
+            position: relative;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            margin-bottom: 10%;
+            font-size: 20px;
+        }
+
+        .modal-header .close {
+            font-size: 34px;
+            cursor: pointer;
+            color: #999;
+            margin-bottom: 10%;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-size: 14px;
+            color: #363434;
+            margin-bottom: 1%;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            width: 100%;
+        }
+
+        .form-group input[type="date"] {
+            font-family: Arial, sans-serif;
+        }
+
+        .error {
+            color: red;
+            font-size: 12px;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .btn-save {
+            background-color: #00b386;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .btn-save:hover {
+            background-color: #009973;
+        }
+    </style>
+</head>
+<body>
+
+<div class="dashboard">
+    <!-- Card 1 -->
+    <div class="card">
+        <h3>Nova Despesa</h3>
+        <p>Situação das suas despesas.</p>
+        <button class="btn-open-modal" onclick="openModal()">Incluir Despesa</button>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="card">
+        <h3>Despesas por categorias</h3>
+        <p>Achar com que você mais gasta.</p>
+        <a href="#" class="btn">Ver Despesas</a>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="card">
+        <h3>Metas de Economia</h3>
+        <p>Situação projetada das suas metas de economia.</p>
+        <a href="#" class="btn">Adicionar este recurso agora</a>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="card">
+        <h3>Metas de Investimentos</h3>
+        <p>Situação projetada das suas metas de investimentos.</p>
+        <a href="#" class="btn">Fazer previsão</a>
+    </div>
+</div>
+
+<div class="modal" id="expenseModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Nova Despesa</h2>
+            <span class="close" onclick="closeModal()">&times;</span>
+        </div>
+
+        <form method="POST" action="{% url 'novaDespesa' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="valor">Valor (R$):</label>
+                <input type="number" id="valor" name="valor" required placeholder="Informe um valor">
+                <span class="error">Informe um valor diferente de zero</span>
+            </div>
+
+            <div class="form-group">
+                <label for="data">Data:</label>
+                <input type="date" name="data" id="data" required>
+            </div>
+
+            <div class="form-group">
+                <label for="Repeticao">Repetição:</label>
+                <select id="Repeticao" name="Repeticao">
+                    <option value="Unica">Única</option>
+                    <option value="Parcelada">Parcelada</option>
+                    <option value="Fixa">Fixa</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="tipoDespesa">Categoria:</label>
+                <select id="tipoDespesa" name="tipoDespesa">
+                    <option value="Automovel">Automóvel</option>
+                    <option value="BemEstar">Bem Estar</option>
+                    <option value="Educacao">Educação</option>
+                    <option value="Funcionarios">Funcionários</option>
+                    <option value="Lazer">Lazer</option>
+                    <option value="Moradia">Moradia</option>
+                    <option value="Saude">Saúde</option>
+                    <option value="Seguros">Seguros</option>
+                    <option value="Transporte">Transporte</option>
+                    <option value="Vestuario">Vestuário</option>
+                    <option value="Celular">Celular</option>
+                    <option value="Investimentos">Investimentos</option>
+                    <option value="OutrasDespesas">Outras Despesas</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="descricao">Descrição:</label>
+                <textarea id="descricao" rows="5"></textarea>
+            </div>
+
+            <div class="modal-footer">
+                <button type="submit" class="btn-save">Salvar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function openModal() {
+        document.getElementById('expenseModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('expenseModal').style.display = 'none';
+    }
+</script>
+
+</body>
+</html>
