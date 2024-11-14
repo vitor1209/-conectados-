@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minhas Despesas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h2 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #00b386;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #e0f7f5;
+        }
+        .filter-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+        width: 100%;
+        padding: 10px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .filter-container span {
+        font-size: 16px;
+        color: #333;
+        margin-right: 10px;
+    }
+
+    .filter-container select {
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 14px;
+        color: #333;
+        background-color: #f9f9f9;
+        width: 100%;
+        max-width: 250px;
+        transition: border-color 0.3s ease;
+        margin: 0 1%
+    }
+
+    .filter-container select:focus {
+        outline: none;
+        border-color: #00b386;
+    }
+
+    .filter-container select option {
+        padding: 10px;
+    }
+
+    .btn {
+        padding: 10px 15px;
+        background-color: #00b386;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+    }
+    .btn:hover {
+        background-color: #009973;
+    }
+
+    .Voltar{
+        margin-top:3%;
+    }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Minhas Despesas</h2>
+    
+    <form method="GET" action="{%url 'despesasLista'%}">
+        <div class="filter-container">
+            <label for='filtroCategoria'>Filtrar por:</label>
+            <select name='filtroCategoria' id='filtroCategoria' class="filter-select">
+                <option value="">Todos</option>
+                <option value="OutrasDespesas">Outras Despesas</option>
+                <option value="Automovel">Automóvel</option>
+                <option value="BemEstar">Bem Estar</option>
+                <option value="Educacao">Educação</option>
+                <option value="Funcionarios">Funcionários</option>
+                <option value="Lazer">Lazer</option>
+                <option value="Moradia">Moradia</option>
+                <option value="Saude">Saúde</option>
+                <option value="Seguros">Seguros</option>
+                <option value="Transporte">Transporte</option>
+                <option value="Vestuario">Vestuário</option>
+                <option value="Celular">Celular</option>
+                <option value="Investimentos">Investimentos</option>
+            </select>
+            <button class='btn' type='submit'>Filtrar</button>
+        </div>
+        
+
+    </form>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Valor (R$)</th>
+                <th>Data</th>
+                <th>Repetição</th>
+                <th>Categoria</th>
+                <th>Descrição</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for despesa in despesa %}
+            <tr>
+                <td>{{ despesa.valor }}</td>
+                <td>{{ despesa.data }}</td>
+                <td>{{ despesa.repeticao }}</td>
+                <td>{{ despesa.categoria }}</td>
+                <td>{{ despesa.descricao|default:"-" }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5">Nenhuma despesa encontrada.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{% url 'home' %}" class="btn Voltar">Voltar</a>
+</div>
+
+</body>
+</html> 

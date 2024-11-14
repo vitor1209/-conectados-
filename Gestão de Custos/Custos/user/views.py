@@ -15,7 +15,7 @@ def signup(request):
                 user.save()
 
                 login(request, user)
-                return redirect('sigin')
+                return redirect('signin')
             else:
                 return render(request, 'user/signup.html', {
                     'form': UserCreationForm(),
@@ -28,10 +28,10 @@ def signup(request):
                 'error': 'Usuário já existe.'
             })
         
-def sigin(request):
+def signin(request):
 
     if request.method == 'GET':
-        return render(request, 'user/sigin.html', {
+        return render(request, 'user/signin.html', {
             'form': AuthenticationForm(),
         })
     
@@ -39,13 +39,11 @@ def sigin(request):
         user = authenticate( request, username=request.POST['username'], password=request.POST['password'])
 
         if user is None:
-            print('vdvf')
-            return render(request , 'user/sigin.html', {
+            return render(request , 'user/signin.html', {
                 'form': AuthenticationForm(),
                 'error': 'Usuário ou senha está incorreto.'
             })
 
         else:
-            print('aeaeaeae')
             login(request, user)
-            return redirect('signup') 
+            return redirect('home') 
