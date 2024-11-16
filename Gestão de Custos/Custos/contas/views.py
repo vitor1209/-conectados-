@@ -1,6 +1,8 @@
 from django.shortcuts import render , redirect
 from .models import Despesa
 from django.views.generic import ListView
+import json
+
 
 def home(request):
     return render(request, 'contas\home.html')
@@ -31,3 +33,35 @@ class DespesasListView(ListView):
         if categoria:
            queryset = queryset.filter(categoria=categoria)
         return queryset
+
+def metas(request):
+    labels = []
+    data = []   
+    percentual = []
+
+    queryset = Despesa.objects.order_by('-valor')
+    for conta in queryset:
+        if conta.categoria in labels:
+            indice = labels.index(conta.categoria)
+            dataValor = data[indice]
+            data[indice] = dataValor + conta.valor
+        else :
+            labels.append(conta.categoria)
+            data.append(conta.valor)
+
+    total = sum(data)
+    for n in data:
+        n = (n / total) * 100
+        percentual.append(round(n))
+
+
+    combined_data = zip(labels, data , percentual)
+    
+    data = [float(d) for d in data]  
+    context = {
+        'labels': json.dumps(labels),
+        'data': json.dumps(data),
+        'combined_data': combined_data,
+        'percentual' : percentual
+    }
+    return render(request, 'contas\metas.html', context)  

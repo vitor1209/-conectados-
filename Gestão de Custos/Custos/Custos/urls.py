@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from user.views import signup, signin
-from contas.views import home, novaDespesa, DespesasListView
+from contas.views import home, novaDespesa, DespesasListView , metas
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,4 +26,5 @@ urlpatterns = [
     path('home/',home, name='home'),
     path('nova-despesa/', novaDespesa, name='novaDespesa'),
     path('despesasLista/', DespesasListView.as_view(), name='despesasLista'),
+    path('metas/', metas, name='metas'),
 ]

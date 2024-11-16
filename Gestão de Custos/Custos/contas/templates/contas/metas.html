@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Metas</title>
+</head>
+<body>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 3%;
+        }
+
+        canvas {
+            display: flex;
+            justify-content: center;
+            align-items: center;     
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: -5%;
+            
+        }
+
+         .expense-item {
+          display: flex;
+          align-items: center;
+          margin: 8px 0;
+          font-size: 1rem;
+      }
+      
+      .label {
+          width: 100px;
+          font-weight: bold;
+          color: #333;
+      }
+      
+      .percentage {
+          background-color: #f1f1f1;
+          padding: 2px 6px;
+          border-radius: 4px;
+          font-size: 1rem;
+          color: #333;
+          margin-left: 1rem;
+      }
+      
+      .amount {
+        font-weight: bold;
+        margin-left: auto; 
+      }
+      
+      .negative {
+          color: #d9534f;
+      }
+
+      .btn {
+        padding: 10px 15px;
+        background-color: #00b386;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+    }
+    .btn:hover {
+        background-color: #009973;
+    }
+
+    .Voltar{
+        margin-top:3%;
+    }
+
+    </style>
+
+    <div class="container">
+        <h1>Meus gastos</h1>
+        <div class="grafico">
+            <div>
+                <canvas id="myChart"></canvas>
+            </div>
+          
+          
+          <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+          <canvas id="myChart"></canvas>
+
+          <script>
+            const ctx = document.getElementById('myChart').getContext('2d');
+            const myChart = new Chart(ctx, {
+              type: 'doughnut',
+              data: {
+                labels: {{labels|safe}},
+                datasets: [{
+                  label: 'Valor gasto',
+                  data:{{data|safe}},
+                }]
+              },
+              options: {
+                responsive: false
+              }
+            });
+          </script>
+
+          {% for label, value, percentual in combined_data %}
+          <div class="expense-item">
+              <span class="label">{{label}}</span>
+              <span class="percentage">{{percentual}}%</span>
+              <span class="amount negative">-R$ {{value}}</span>
+            </div>        
+          {% endfor %}
+
+      </div>
+      <a href="{% url 'home' %}" class="btn Voltar">Voltar</a>
+    </div>
+</body>
+</html>
