@@ -5,13 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
     <style>
-        body {
+        *{
+    margin: 0;
+}
+        main     {
             font-family: Arial, sans-serif;
             background-color: #f5f5f5;
-            display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            display: flex;
             margin: 0;
         }
         .dashboard {
@@ -177,36 +180,62 @@
         tr:hover {
             background-color: #e0f7f5;
         }
+        .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    padding: 15px 50px;
+    color: white;
+}
+
+.user{
+    background-color: #555;
+    padding: 10px 30px;
+    border-radius: 5px;
+    color: white;
+}
+
     </style>
 </head>
 <body>
+    <header>
+        <nav class="navbar">
+            <div> <h1> InvesteAI </h1></div>
+            <div class="user">
+                {{usuario}}
+            </div>
+        </nav>
+      </header>
 
-<div class="dashboard">
+      <main>
+    <div class="dashboard">
 
-    <div class="card">
-        <h3>Nova Despesa</h3>
-        <p>Situação das suas despesas.</p>
-        <button class="btn-open-modal" onclick="openModal()">Incluir Despesa</button>
+        <div class="card">
+            <h3>Nova Despesa</h3>
+            <p>Situação das suas despesas.</p>
+            <button class="btn-open-modal" onclick="openModal()">Incluir Despesa</button>
+        </div>
+
+        <div class="card">
+            <h3>Despesas por categorias</h3>
+            <p>Achar com que você mais gasta.</p>
+            <a href="{% url 'despesasLista' %}" class="btn">Ver Despesas</a>
+        </div>
+
+        <div class="card">
+            <h3>Meus Gastos</h3>
+            <p>Seus gastos para planejar metas de economia.</p>
+            <a href="{% url 'metas' %}" class="btn">Ver meus gastos</a>
+        </div>
+
+        <div class="card">
+            <h3>Metas de Investimentos</h3>
+            <p>Situação projetada das suas metas de investimentos.</p>
+            <button class="btn-open-modal" onclick="opencalcular()">Fazer previsão</button>
+        </div>
     </div>
-
-    <div class="card">
-        <h3>Despesas por categorias</h3>
-        <p>Achar com que você mais gasta.</p>
-        <a href="{% url 'despesasLista' %}" class="btn">Ver Despesas</a>
-    </div>
-
-    <div class="card">
-        <h3>Meus Gastos</h3>
-        <p>Seus gastos para planejar metas de economia.</p>
-        <a href="{% url 'metas' %}" class="btn">Ver meus gastos</a>
-    </div>
-
-    <div class="card">
-        <h3>Metas de Investimentos</h3>
-        <p>Situação projetada das suas metas de investimentos.</p>
-        <button class="btn-open-modal" onclick="opencalcular()">Fazer previsão</button>
-    </div>
-</div>
+</main>
 
 <div class="modal" id="modalDespesa">
     <div class="modal-content">

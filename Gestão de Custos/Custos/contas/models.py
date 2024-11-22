@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class Despesa(models.Model):
     VALOR_CHOICES = [
@@ -28,6 +29,6 @@ class Despesa(models.Model):
     repeticao = models.CharField(max_length=10, choices=VALOR_CHOICES, default='Unica')
     categoria = models.CharField(max_length=30, choices=CATEGORIA_CHOICES, default='OutrasDespesas')
     descricao = models.TextField(blank=True, null=True)
-
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     def __str__(self):
         return f"Despesa de R$ {self.valor} em {self.data} ({self.repeticao})"
