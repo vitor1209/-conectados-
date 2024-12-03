@@ -1,30 +1,23 @@
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from .models import Musica , Avaliacao
-from .serializers import MusicaSerializer , AvaliacaoSerializer
+from rest_framework import generics
+from .models import Musica, Avaliacao
+from .serializers import MusicaSerializer, AvaliacaoSerializer
 
-class  MusicaAPIView(APIView):
-    def get(self , request ):
-        musicas = Musica.objects.all()
-        serializer = MusicaSerializer(musicas, many=True)
-        return Response(serializer.data)
-    
-    def post(self , request):
-        serializer = MusicaSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)    
+#  listar todas as musicas ou criar uma nova
+class MusicasAPIView(generics.ListCreateAPIView): # C = create
+    queryset = Musica.objects.all()
+    # Especifica o serializer q vai por converter os dados entre JSON e o modelo
+    serializer_class = MusicaSerializer
 
+# Classe para operações específicas em uma música (detalhar (R), atualizar (U) ou excluir (D))
+class MusicaAPIView(generics.RetrieveUpdateDestroyAPIView):
+    # tem q devinir a música específica pelo ID
+    queryset = Musica.objects.all()
+    serializer_class = MusicaSerializer
 
+class AvaliacoesAPIView(generics.ListCreateAPIView):
+    queryset = Avaliacao.objects.all()
+    serializer_class = AvaliacaoSerializer
 
-class AvaliacaoAPIView(APIView):
-    def get(self , request ):
-        Avaliacao  = Musica.objects.all()
-        serializer = AvaliacaoSerializer(Avaliacao , many=True)
-        return Response(serializer.data)
-    def post(self , request):
-        serializer = AvaliacaoSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)    
+class AvaliacaoAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Avaliacao.objects.all()
+    serializer_class = AvaliacaoSerializer
